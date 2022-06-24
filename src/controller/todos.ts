@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { Todo } from "../models/todo";
 
-const TODOS: Todo[] = [];
+let TODOS: Todo[] = [];
 
 export const createTodo: RequestHandler = (req, res, next) => {
   const text = (req?.body as { text: string })?.text;
@@ -14,4 +14,14 @@ export const createTodo: RequestHandler = (req, res, next) => {
 
 export const getTodos: RequestHandler = (req, res, next) => {
   res.status(200).json({ data: TODOS });
+};
+
+export const deleteTodo: RequestHandler = (req, res, next) => {
+  const id = (req.params as { id: string })?.id;
+  const newTodos = TODOS.filter((todo) => todo?.id !== id);
+  TODOS = newTodos;
+
+  res
+    .status(200)
+    .json({ message: "Todo deleted successfully", data: newTodos });
 };
