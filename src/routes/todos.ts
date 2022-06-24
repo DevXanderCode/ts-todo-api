@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { createTodo, getTodos, deleteTodo } from "../controller/todos";
+import {
+  createTodo,
+  getTodos,
+  deleteTodo,
+  updateTodo,
+} from "../controller/todos";
 
 const router = Router();
 
@@ -7,7 +12,7 @@ router.post("/", createTodo);
 
 router.get("/", getTodos);
 
-router.patch("/:id");
+router.patch("/:id", updateTodo);
 
 router.delete("/:id", deleteTodo);
 
