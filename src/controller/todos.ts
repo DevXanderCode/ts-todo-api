@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { Todo } from "../models/todo";
 
-let TODOS: Todo[] = [];
+const TODOS: Todo[] = [];
 
 export const createTodo: RequestHandler = (req, res, next) => {
   const text = (req?.body as { text: string })?.text;
@@ -33,10 +33,14 @@ export const updateTodo: RequestHandler<{ id: string }> = (req, res, next) => {
 
 export const deleteTodo: RequestHandler<{ id: string }> = (req, res, next) => {
   const id = req.params?.id;
-  const newTodos = TODOS.filter((todo) => todo?.id !== id);
-  TODOS = newTodos;
 
-  res
-    .status(200)
-    .json({ message: "Todo deleted successfully", data: newTodos });
+  const todoIndex = TODOS.findIndex((todo) => todo?.id === id);
+
+  if (todoIndex < 0) {
+    throw new Error("Could not find todo!");
+  }
+
+  TODOS.splice(todoIndex, 1);
+
+  res.status(200).json({ message: "Todo deleted successfully", data: TODOS });
 };
